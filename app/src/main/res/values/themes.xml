@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Testowanie2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Lights" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/basic</item>
         <item name="colorPrimaryVariant">@color/basic</item>
@@ -14,12 +14,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Testowanie2.NoActionBar">
+    <style name="Theme.Lights.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Testowanie2.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Lights.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.Testowanie2.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Lights.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
