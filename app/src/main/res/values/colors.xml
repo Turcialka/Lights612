@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Day
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="basic">#1C8ADB</color>
+    <color name="lightbasic">#9DCFF3</color>
+    <color name="item">#4D6A80</color>
+
+    //Night
+    <color name="basicNight">#003861</color>
+</resources>

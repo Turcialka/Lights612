@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_light">
+
+    <fragment
+        android:id="@+id/nav_light"
+        android:name="com.example.lights.ItemFragment"
+        android:label="@string/menu_lights"
+        tools:layout="@layout/fragment_item_list" />
+
+    <fragment
+        android:id="@+id/nav_groups"
+        android:name="com.example.lights.ui.groups.GroupsFragment"
+        android:label="@string/menu_groups"
+        tools:layout="@layout/fragment_groups" />
+
+    <fragment
+        android:id="@+id/nav_schedule"
+        android:name="com.example.lights.ui.schedule.ScheduleFragment"
+        android:label="@string/menu_schedule"
+        tools:layout="@layout/fragment_schedule" />
+    <fragment
+        android:id="@+id/addLight"
+        android:name="com.example.lights.AddLight"
+        android:label="@string/add_light"
+        tools:layout="@layout/fragment_add_light"/>
+
+    <action
+        android:id="@+id/ac_g_addLight"
+        app:destination="@id/addLight"/>
+    <action
+        android:id="@+id/action_global_nav_light"
+        app:destination="@id/nav_light"/>
+</navigation>
