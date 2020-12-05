@@ -1,5 +1,6 @@
 package com.example.lights;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,6 +28,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+
 import java.util.List;
 //
 public class modelPanel extends AppCompatActivity {
@@ -34,12 +37,15 @@ public class modelPanel extends AppCompatActivity {
     String User, loggedUserId;
     NetworkHandler networkHandler;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_model_panel);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         networkHandler = new NetworkHandler();
 
@@ -67,6 +73,9 @@ public class modelPanel extends AppCompatActivity {
         textViewToChange.setText(loginUser);*/
     }
 
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,6 +98,8 @@ public class modelPanel extends AppCompatActivity {
             case R.id.add_light:
                 NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.ac_g_addLight);
                 break;
+            case R.id.add_group:
+                NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.ac_g_addNewGroup);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,6 +125,11 @@ public class modelPanel extends AppCompatActivity {
             public void onResponse(String response) {
                 System.out.println("Response is: " + response);
                 //Obsłuzyc responsa
+
+                Gson gson = new Gson();
+                Group[] groups = gson.fromJson(response, Group[].class);
+                System.out.println(groups[0].getLights().get(0).getSerial());
+
             }
         }, new Response.ErrorListener() {
             @Override

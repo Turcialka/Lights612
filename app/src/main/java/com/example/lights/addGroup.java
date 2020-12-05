@@ -20,69 +20,65 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddLight#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AddLight extends Fragment{
+public class addGroup extends Fragment {
 
-    Button saveLight;
-    EditText name;
-    EditText serial;
-    String userId;
+    Button saveGroup;
+    EditText nameGroup;
+    String userId_toNewGroup;
 
     NetworkHandler networkHandler;
 
-    public AddLight() {
+    public addGroup() {
         // Required empty public constructor
     }
 
-    public static AddLight newInstance(String param1, String param2) {
-        AddLight fragment = new AddLight();
+    public static addGroup newInstance(String param1, String param2) {
+        addGroup fragment = new addGroup();
         Bundle args = new Bundle();
+
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          //  networkHandler = new NetworkHandler();
-        }
+        if (getArguments() != null) {
 
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_add_light, container, false);
-        saveLight = v.findViewById(R.id.button_addL);
-        name = v.findViewById(R.id.addLightEditTextName);
-        serial = v.findViewById(R.id.addLightEditTextSerialNumber);
+        View v = inflater.inflate(R.layout.fragment_add_group, container, false);
+
+        saveGroup = v.findViewById(R.id.button_addNewGroup);
+        nameGroup = v.findViewById(R.id.addNewGroupName);
 
         modelPanel activity = (modelPanel) getActivity();
 
         networkHandler = new NetworkHandler();
-        userId = activity.loggedUserId;
+        userId_toNewGroup = activity.loggedUserId;
 
-        Toast.makeText(activity, userId , Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, userId_toNewGroup , Toast.LENGTH_SHORT).show();
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
-        saveLight.setOnClickListener(new View.OnClickListener() {
+        saveGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String url = networkHandler.makeUrl("/groups/add", "name="+nameGroup.getText(), "user_id="+userId_toNewGroup);
 
-                String url = networkHandler.makeUrl("/lights/add", "serial="+serial.getText(),"name="+name.getText() ,"user_id="+userId);
-               // System.out.println(url);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("Response is: " + response);
                         if(response.equals("Saved")){
-                            Toast.makeText(v.getContext(),"Dodano pomyślnie urządzenie!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Grupa dodana pomyślnie!", Toast.LENGTH_LONG).show();
                         }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Błąd dodawania nowej grupy.", Toast.LENGTH_LONG).show();
                         }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -93,14 +89,14 @@ public class AddLight extends Fragment{
                         if (networkResponse != null) {
                             Log.e("Status code", String.valueOf(networkResponse.statusCode));
                         }
+
                     }
                 });
                 queue.add(stringRequest);
-
             }
         });
+
+
         return v;
     }
-
 }
-

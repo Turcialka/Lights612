@@ -12,8 +12,14 @@
         android:title="@string/add_group"
         app:showAsAction="never" />
     <item
+        android:id="@+id/add_light_to_group"
+        android:orderInCategory="100"
+        android:title="@string/add_lightToGroup"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/add_schedule"
         android:orderInCategory="100"
         android:title="@string/add_schedule"
         app:showAsAction="never" />
+
 </menu>

@@ -10,6 +10,7 @@
     <string name="add_light">Dodaj urządzenie</string>
     <string name="add_group">Utwórz grupę</string>
     <string name="add_schedule">Utwórz harmonogram</string>
+    <string name="add_lightToGroup">Dodaj żarówkę do grupy</string>
 
     <string name="menu_lights">Urządzenia</string>
     <string name="menu_groups">Grupy</string>

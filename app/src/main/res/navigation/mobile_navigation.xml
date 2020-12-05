@@ -28,9 +28,18 @@
         android:label="@string/add_light"
         tools:layout="@layout/fragment_add_light"/>
 
+    <fragment
+        android:id="@+id/addNewGroup"
+        android:name="com.example.lights.addGroup"
+        android:label="@string/add_group"
+        tools:layout="@layout/fragment_add_group"/>
+
     <action
         android:id="@+id/ac_g_addLight"
         app:destination="@id/addLight"/>
+    <action
+        android:id="@+id/ac_g_addNewGroup"
+        app:destination="@id/addNewGroup"/>
     <action
         android:id="@+id/action_global_nav_light"
         app:destination="@id/nav_light"/>

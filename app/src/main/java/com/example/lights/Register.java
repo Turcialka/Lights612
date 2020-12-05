@@ -3,12 +3,14 @@ package com.example.lights;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,13 +34,18 @@ public class Register extends AppCompatActivity {
     Boolean ok_login = false;
     Boolean ok_passwd = false;
 
+
     String outputString;
     String AES = "AES";
+
+    NetworkHandler networkHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        networkHandler = new NetworkHandler();
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -47,7 +54,10 @@ public class Register extends AppCompatActivity {
         reg_password = findViewById(R.id.reg_password);
         buttonREGISTERuser = findViewById(R.id.buttonREGISTERuser);
 
-        reg_mail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+
+
+      /*  reg_mail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 mail_focus_change(view, hasFocus);
@@ -68,12 +78,21 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        */
+
         buttonREGISTERuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+
+                checkMail(v);
+                checkLogin(v);
+                checkPasswd(v);
+
+
                 if (ok_email & ok_login & ok_passwd) {
-                    Toast.makeText(v.getContext(), "Zalogowano pomyślnie!", Toast.LENGTH_SHORT);
+
+                    Toast.makeText(v.getContext(), "Zalogowano pomyślnie!", Toast.LENGTH_SHORT).show();
                     System.out.println("Zalogowano pomyślnie!");
 
 
@@ -84,7 +103,7 @@ public class Register extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    String url = makeUrl();
+                    String url = networkHandler.makeUrl("/users/add", "login="+reg_username.getText(), "password="+outputString, "email="+reg_mail.getText());
                     System.out.println(url);
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                         @Override
@@ -92,7 +111,7 @@ public class Register extends AppCompatActivity {
                             System.out.println("Response is: " + response);
 
                             if(response.equals("Username_exist") || response.equals("Email_exist")){
-                                Toast.makeText(v.getContext(), "Dane niepoprawne! Proszę sprawdzić wpisane dane.", Toast.LENGTH_LONG);
+                                Toast.makeText(v.getContext(), "Dane niepoprawne! Proszę sprawdzić wpisane dane.", Toast.LENGTH_LONG).show();
                                 System.out.println("Dane niepoprawne! Proszę sprawdzić wpisane dane.");
                             }else{
                                 Intent mainActivity = new Intent(Register.this, MainActivity.class);
@@ -135,15 +154,52 @@ public class Register extends AppCompatActivity {
         return  secretKeySpec;
     }
 
-    private String makeUrl() {
-        String temp = "";
-        //String restIp = "http://192.168.8.159:8080/users/add";
-        String restIp = "http://10.0.2.2:8080/users/add";
-        temp = temp + restIp + "?login=" + reg_username.getText() + "&password=" + outputString + "&email=" + reg_mail.getText();
 
-        return temp;
+    private void checkMail(View view){
+        String getEmail = reg_mail.getText().toString();
+
+        if (!isEmailValid(getEmail)) {
+            Toast.makeText(view.getContext(), "Email jest niepoprawny!", Toast.LENGTH_LONG).show();
+            ok_email = false;
+            System.out.println("Email zle podany");
+        } else if (getEmail.equals("")) {
+            Toast.makeText(view.getContext(), "Pole email nie może być puste!", Toast.LENGTH_LONG).show();
+            ok_email = false;
+            System.out.println("Email pusty");
+        } else {
+            System.out.println("Email dobrze");
+            ok_email = true;
+        }
     }
 
+    private void checkLogin(View view){
+        String getUsername = reg_username.getText().toString();
+
+        if (getUsername.equals("")) {
+            Toast.makeText( view.getContext(),"Pole login nie może być puste!", Toast.LENGTH_LONG).show();
+            System.out.println("username zle podany");
+            ok_login = false;
+        } else {
+            ok_login = true;
+            System.out.println("username dobrze podany");
+        }
+    }
+
+    private void checkPasswd(View view){
+        String getPasswd = reg_password.getText().toString();
+
+
+        if (getPasswd.equals("")) {
+            Toast.makeText(view.getContext(), "Pole hasło nie może być puste!", Toast.LENGTH_LONG).show();
+            System.out.println("haslo zle podany");
+            ok_passwd = false;
+        } else {
+            ok_passwd = true;
+            System.out.println("haslo dobrze podany");
+        }
+    }
+
+/*
     private void passwd_focus_change(View view, boolean hasFocus) {
 
 
@@ -203,7 +259,7 @@ public class Register extends AppCompatActivity {
             }
         }
     }
-
+*/
     boolean isEmailValid(CharSequence email){
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }

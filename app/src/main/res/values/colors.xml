@@ -7,6 +7,8 @@
     <color name="lightbasic">#9DCFF3</color>
     <color name="item">#4D6A80</color>
 
+    <color name="error">#FF0000</color>
+    <color name="hint">#00CDFF</color>
     //Night
     <color name="basicNight">#003861</color>
 </resources>
