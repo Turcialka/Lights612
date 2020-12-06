@@ -1,6 +1,6 @@
 package com.example.lights;
 
-import android.graphics.drawable.Drawable;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,7 +34,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 //
-public class modelPanel extends AppCompatActivity {
+public class ModelPanel extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     String User, loggedUserId;
@@ -51,7 +51,6 @@ public class modelPanel extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         networkHandler = new NetworkHandler();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -66,25 +65,17 @@ public class modelPanel extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //getting login, ID from activity modelPanel
-        User = (String) getIntent().getExtras().getString("UsernameL");
+        User = (String) getIntent().getExtras().getString("UsernameL"); //getting login, ID from activity modelPanel
         loggedUserId = (String) getIntent().getExtras().getString("idUser");
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(getGroups());
-       /* String loginUser = getIntent().getStringExtra("UsernameL");
-
-        final TextView textViewToChange = (TextView) findViewById(R.id.textView);
-        textViewToChange.setText(loginUser);*/
     }
-
-
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.model_panel, menu);
+        getMenuInflater().inflate(R.menu.model_panel, menu); // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
@@ -95,6 +86,7 @@ public class modelPanel extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -114,7 +106,7 @@ public class modelPanel extends AppCompatActivity {
     }
 
     private Fragment getVisibleFragment() {
-        FragmentManager fragmentManager = modelPanel.this.getSupportFragmentManager();
+        FragmentManager fragmentManager = ModelPanel.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {
@@ -133,18 +125,13 @@ public class modelPanel extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 System.out.println("Response is: " + response);
-                //Obsłuzyc responsa
-
                 Gson gson = new Gson();
                 Type groupListType = new TypeToken<ArrayList<Group>>(){}.getType();
                 groups = gson.fromJson(response, groupListType);
                 System.out.println(groups.get(0).getLights().get(0).getSerial());
 
-
-
                 for (Group group:groups){
                     groupsName.add(group.getName());
-
                 }
                 for(Light light:groups.get(0).getLights()){
                     lightNames.add(light.getName());
@@ -152,7 +139,7 @@ public class modelPanel extends AppCompatActivity {
                 }
                 System.out.println(lightNames);
 
-
+                NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.action_placeholderFragment_to_nav_light);
 
             }
         }, new Response.ErrorListener() {

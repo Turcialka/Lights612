@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class addGroup extends Fragment {
+public class AddGroup extends Fragment {
 
     Button saveGroup;
     EditText nameGroup;
@@ -28,12 +28,12 @@ public class addGroup extends Fragment {
 
     NetworkHandler networkHandler;
 
-    public addGroup() {
+    public AddGroup() {
         // Required empty public constructor
     }
 
-    public static addGroup newInstance(String param1, String param2) {
-        addGroup fragment = new addGroup();
+    public static AddGroup newInstance(String param1, String param2) {
+        AddGroup fragment = new AddGroup();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -56,7 +56,7 @@ public class addGroup extends Fragment {
         saveGroup = v.findViewById(R.id.button_addNewGroup);
         nameGroup = v.findViewById(R.id.addNewGroupName);
 
-        modelPanel activity = (modelPanel) getActivity();
+        ModelPanel activity = (ModelPanel) getActivity();
 
         networkHandler = new NetworkHandler();
         userId_toNewGroup = activity.loggedUserId;

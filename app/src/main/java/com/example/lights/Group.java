@@ -7,11 +7,7 @@ public class Group {
     private String name;
     private int id;
     private int userId;
-
-
-
     private List<Light> lights;
-
 
     public Group(String name, int id, int userId, List<Light> lights) {
         this.name = name;
@@ -20,12 +16,9 @@ public class Group {
         this.lights = lights;
     }
 
-
-
     public int getId() {
         return id;
     }
-
 
     public String getName() {
         return name;

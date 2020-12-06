@@ -59,7 +59,7 @@ public class AddLight extends Fragment{
         name = v.findViewById(R.id.addLightEditTextName);
         serial = v.findViewById(R.id.addLightEditTextSerialNumber);
 
-        modelPanel activity = (modelPanel) getActivity();
+        ModelPanel activity = (ModelPanel) getActivity();
 
         networkHandler = new NetworkHandler();
         userId = activity.loggedUserId;

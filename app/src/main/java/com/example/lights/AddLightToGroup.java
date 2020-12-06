@@ -1,12 +1,9 @@
 package com.example.lights;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.renderscript.Type;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,14 +21,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
-public class addLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener{
+public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener{
 
     Button saveLightInGroup;
     String userIdLTG;
@@ -51,14 +45,14 @@ public class addLightToGroup extends Fragment implements AdapterView.OnItemSelec
 
     NetworkHandler networkHandler;
 
-    public addLightToGroup() {
+    public AddLightToGroup() {
         // Required empty public constructor
     }
 
 
 
-    public static addLightToGroup newInstance(String param1, String param2) {
-        addLightToGroup fragment = new addLightToGroup();
+    public static AddLightToGroup newInstance(String param1, String param2) {
+        AddLightToGroup fragment = new AddLightToGroup();
         Bundle args = new Bundle();
 
         return fragment;
@@ -78,7 +72,7 @@ public class addLightToGroup extends Fragment implements AdapterView.OnItemSelec
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_light_to_group, container, false);
-        modelPanel activity = (modelPanel) getActivity();
+        ModelPanel activity = (ModelPanel) getActivity();
 
         saveLightInGroup = v.findViewById(R.id.button_addLightsToGroup);
 

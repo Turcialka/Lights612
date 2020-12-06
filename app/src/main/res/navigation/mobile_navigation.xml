@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_light">
+    app:startDestination="@+id/placeholderFragment">
+
+    <fragment
+        android:id="@+id/placeholderFragment"
+        android:name="com.example.lights.PlaceholderFragment"
+        android:label="@string/menu_lights"
+        tools:layout="@layout/fragment_placeholder" >
+        <action
+            android:id="@+id/action_placeholderFragment_to_nav_light"
+            app:destination="@id/nav_light" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_light"
@@ -30,12 +40,12 @@
 
     <fragment
         android:id="@+id/addNewGroup"
-        android:name="com.example.lights.addGroup"
+        android:name="com.example.lights.AddGroup"
         android:label="@string/add_group"
         tools:layout="@layout/fragment_add_group"/>
     <fragment
         android:id="@+id/add_light_to_group"
-        android:name="com.example.lights.addLightToGroup"
+        android:name="com.example.lights.AddLightToGroup"
         android:label="@string/add_lightToGroup"
         tools:layout="@layout/fragment_add_light_to_group"/>
 

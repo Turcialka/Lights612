@@ -7,7 +7,7 @@ public class NetworkHandler{
 
     public String makeUrl(String header, String... values) {
         String tempUrl = "";
-        String restIp = "http://192.168.8.159:8080";
+        String restIp = "http://192.168.0.116:8080";
         tempUrl += restIp + header + "?";
         for (String value : values)
             tempUrl += value + "&";

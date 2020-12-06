@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name="com.example.lights.Register"></activity>
         <activity
-            android:name="com.example.lights.modelPanel"
+            android:name="com.example.lights.ModelPanel"
             android:label="@string/title_activity_model_panel"
             android:theme="@style/Theme.Lights.NoActionBar" />
         <activity android:name="com.example.lights.MainActivity">

@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         if(response.startsWith("true")){
                             loginUser = etUsername.getText().toString(); //getting login from sign in panel
                             loggedUserId = response.substring(5); //gettind ID user from response string true+id
-                            Intent intent = new Intent(MainActivity.this, modelPanel.class);
+                            Intent intent = new Intent(MainActivity.this, ModelPanel.class);
                             intent.putExtra("UsernameL", loginUser);
                             intent.putExtra("idUser", loggedUserId);
                             startActivity(intent);
