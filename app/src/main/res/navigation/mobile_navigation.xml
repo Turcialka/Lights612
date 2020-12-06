@@ -33,6 +33,11 @@
         android:name="com.example.lights.addGroup"
         android:label="@string/add_group"
         tools:layout="@layout/fragment_add_group"/>
+    <fragment
+        android:id="@+id/add_light_to_group"
+        android:name="com.example.lights.addLightToGroup"
+        android:label="@string/add_lightToGroup"
+        tools:layout="@layout/fragment_add_light_to_group"/>
 
     <action
         android:id="@+id/ac_g_addLight"
@@ -43,4 +48,7 @@
     <action
         android:id="@+id/action_global_nav_light"
         app:destination="@id/nav_light"/>
+    <action
+        android:id="@+id/ac_g_light_to_group"
+        app:destination="@id/add_light_to_group"/>
 </navigation>

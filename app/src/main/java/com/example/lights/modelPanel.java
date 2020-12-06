@@ -15,6 +15,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 //
 public class modelPanel extends AppCompatActivity {
@@ -36,8 +39,10 @@ public class modelPanel extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     String User, loggedUserId;
     NetworkHandler networkHandler;
-
-
+    List<Group> groups;
+    List<String> lightNames = new ArrayList<>();
+    List<String> lightsSerial = new ArrayList<>();
+    List<String> groupsName = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,10 @@ public class modelPanel extends AppCompatActivity {
                 break;
             case R.id.add_group:
                 NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.ac_g_addNewGroup);
+                break;
+            case R.id.add_light_to_group:
+                NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.ac_g_light_to_group);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -127,8 +136,23 @@ public class modelPanel extends AppCompatActivity {
                 //Obsłuzyc responsa
 
                 Gson gson = new Gson();
-                Group[] groups = gson.fromJson(response, Group[].class);
-                System.out.println(groups[0].getLights().get(0).getSerial());
+                Type groupListType = new TypeToken<ArrayList<Group>>(){}.getType();
+                groups = gson.fromJson(response, groupListType);
+                System.out.println(groups.get(0).getLights().get(0).getSerial());
+
+
+
+                for (Group group:groups){
+                    groupsName.add(group.getName());
+
+                }
+                for(Light light:groups.get(0).getLights()){
+                    lightNames.add(light.getName());
+                    lightsSerial.add(light.getSerial());
+                }
+                System.out.println(lightNames);
+
+
 
             }
         }, new Response.ErrorListener() {

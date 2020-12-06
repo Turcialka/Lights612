@@ -21,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:textStyle="bold"
                 android:fontFamily="monospace"
-                android:text="Nazwa urządzenia"
+                android:text="Nazwa nowej grupy"
                 />
 
             <EditText
