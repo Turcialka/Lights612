@@ -1,5 +1,6 @@
 package com.example.lights;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -80,6 +81,9 @@ public class AddLight extends Fragment{
                         System.out.println("Response is: " + response);
                         if(response.equals("Saved")){
                             Toast.makeText(v.getContext(),"Dodano pomyślnie urządzenie!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext(), ModelPanel.class);
+                            intent.putExtra("idUser", userId);
+                            startActivity(intent);
                         }else{
                             Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
                         }
