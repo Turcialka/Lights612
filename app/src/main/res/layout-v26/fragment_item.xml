@@ -90,7 +90,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="Neteżenie Bieli" />
+            android:text="Nateżenie Bieli" />
 
         <SeekBar
             android:id="@+id/whiteContentBar"

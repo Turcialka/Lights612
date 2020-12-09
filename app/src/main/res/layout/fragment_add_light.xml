@@ -22,17 +22,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textStyle="bold"
-
-            android:fontFamily="monospace"
+            android:textSize="17sp"
             android:text="Nazwa urządzenia"
             />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="75dp"
-            android:text="Serial number"
-            android:textStyle="bold"
-            android:fontFamily="monospace"/>
+            android:textSize="17sp"
+            android:text="Numer seryjny"
+            android:textStyle="bold" />
 
 
 
