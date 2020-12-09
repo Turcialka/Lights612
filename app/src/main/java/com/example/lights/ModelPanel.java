@@ -44,6 +44,7 @@ public class ModelPanel extends AppCompatActivity {
     List<String> lightsSerial = new ArrayList<>();
     List<String> groupsName = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +118,7 @@ public class ModelPanel extends AppCompatActivity {
         return null;
     }
 
-    private StringRequest getGroups(){
+    public StringRequest getGroups(){
 
         String url = networkHandler.makeUrl("/groups/get", "user_id="+loggedUserId);
 
@@ -128,8 +129,6 @@ public class ModelPanel extends AppCompatActivity {
                 Gson gson = new Gson();
                 Type groupListType = new TypeToken<ArrayList<Group>>(){}.getType();
                 groups = gson.fromJson(response, groupListType);
-                System.out.println(groups.get(0).getLights().get(0).getSerial());
-
                 for (Group group:groups){
                     groupsName.add(group.getName());
                 }
@@ -137,10 +136,7 @@ public class ModelPanel extends AppCompatActivity {
                     lightNames.add(light.getName());
                     lightsSerial.add(light.getSerial());
                 }
-                System.out.println(lightNames);
-
                 NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.action_placeholderFragment_to_nav_light);
-
             }
         }, new Response.ErrorListener() {
             @Override

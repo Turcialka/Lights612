@@ -74,7 +74,9 @@
             android:layout_marginTop="20dp"
             android:progress="100"
             android:max="100"
-            android:min="5" />
+            android:min="5"
+            android:thumbTint="#FFFFFF"
+            android:progressTint="#FFFFFF"/>
     </LinearLayout>
 
 
@@ -95,11 +97,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:progress="0"
             android:max="1023"
-            android:min="0" />
+            android:min="0"
+            android:progress="0"
+            android:thumbTint="#FFFFFF"
+            android:progressTint="#FFFFFF"/>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonBreathe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="8dp"
+            android:text="@string/buttonBreatheText" />
+
+        <Button
+            android:id="@+id/buttonFade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:text="@string/buttonFadeText" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,8 +1,10 @@
 package com.example.lights;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -75,6 +77,9 @@ public class AddGroup extends Fragment {
                     public void onResponse(String response) {
                         if(response.equals("Saved")){
                             Toast.makeText(v.getContext(),"Grupa dodana pomyślnie!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext(), ModelPanel.class);
+                            intent.putExtra("idUser", userId_toNewGroup);
+                            startActivity(intent);
                         }else{
                             Toast.makeText(v.getContext(),"Błąd dodawania nowej grupy.", Toast.LENGTH_LONG).show();
                         }

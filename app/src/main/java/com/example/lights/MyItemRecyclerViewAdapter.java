@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -73,42 +74,25 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                                 holder.g = 0;
                                 holder.b = 0;
                                 holder.w = 1023;
-                                holder.whiteContent = 1023;
                                 holder.whiteContentBar.setProgress(1023, true);
                             }else {
                                 holder.r = tempR*4;//*4 bo sterownik działa od 0-1023 a pixele są opisywane od 0 do 255
                                 holder.g = tempG*4;
                                 holder.b = tempB*4;
                                 holder.w = 0;
-                                holder.whiteContent = 0;
-                                holder.whiteContentBar.setProgress(0, true);
+                                holder.whiteContentBar.setProgress(holder.w, true);
                             }
+
+                            holder.updateDials();
                             holder.brightnessBar.setThumbTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
                             holder.brightnessBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
+
                             System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g + " " + holder.b + " " + holder.w + " " + holder.brightness);
 
                             String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
                             if(!holder.mItem.getLights().isEmpty()) {
-
                                 String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
-                                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        System.out.println("Response is: " + response);
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        System.out.println("That didn't work!");
-                                        Log.e("Volly Error", error.toString());
-                                        NetworkResponse networkResponse = error.networkResponse;
-                                        if (networkResponse != null) {
-                                            Log.e("Status code", String.valueOf(networkResponse.statusCode));
-                                        }
-                                    }
-                                });
-                                RequestQueue queue = Volley.newRequestQueue(holder.mView.getContext());
-                                queue.add(stringRequest);
+                                holder.sendMessage(url);
                             }
                         }
                     }
@@ -118,10 +102,19 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         });
 
         holder.brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 holder.brightness =(float)((float)i/100.0);
-                System.out.println(holder.brightness);
+
+                if(holder.r == 0 && holder.g == 0 && holder.b == 0 && holder.w == 0) {
+                    holder.w = 1023;
+                    holder.brightnessBar.setThumbTintList(ColorStateList.valueOf(Color.WHITE));
+                    holder.brightnessBar.setProgressTintList(ColorStateList.valueOf(Color.WHITE));
+                    holder.whiteContentBar.setProgress(holder.w, true);
+                    holder.updateDials();
+                }
+
             }
 
             @Override
@@ -129,18 +122,22 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
             }
 
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
+                if(!holder.mItem.getLights().isEmpty()) {
+                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                    holder.sendMessage(url);
+                }
+                holder.updateDials();
             }
         });
 
         holder.whiteContentBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                holder.whiteContent = i;
-                System.out.println(holder.whiteContent);
-
+                holder.w = i;
             }
 
             @Override
@@ -150,13 +147,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
+                if(!holder.mItem.getLights().isEmpty()) {
+                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                    holder.sendMessage(url);
+                }
+                holder.updateDials();
             }
         });
 
         holder.onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                holder.buttonFade.setTextColor(Color.WHITE);
+                holder.buttonBreathe.setTextColor(Color.WHITE);
                 if(!holder.mItem.getLights().isEmpty()) {
                     String switchState = "";
 
@@ -167,25 +171,28 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     }
 
                     String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + switchState, "groupId=" + holder.mItem.getId());
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            System.out.println("Response is: " + response);
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            System.out.println("That didn't work!");
-                            Log.e("Volly Error", error.toString());
-                            NetworkResponse networkResponse = error.networkResponse;
-                            if (networkResponse != null) {
-                                Log.e("Status code", String.valueOf(networkResponse.statusCode));
-                            }
-                        }
-                    });
-                    RequestQueue queue = Volley.newRequestQueue(holder.mView.getContext());
-                    queue.add(stringRequest);
+                    holder.sendMessage(url);
                 }
+            }
+        });
+
+        holder.buttonBreathe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.updateDials();
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=BREATHE", "groupId=" + holder.mItem.getId());
+                holder.sendMessage(url);
+                holder.buttonBreathe.setTextColor(Color.GREEN);
+            }
+        });
+
+        holder.buttonFade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.updateDials();
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=FADE", "groupId=" + holder.mItem.getId());
+                holder.sendMessage(url);
+                holder.buttonFade.setTextColor(Color.GREEN);
             }
         });
 
@@ -205,7 +212,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         private final ImageView colorPicker;
         private final SeekBar brightnessBar, whiteContentBar;
         private final Switch onOffSwitch;
-        private int r, g, b, w, whiteContent;
+        private final Button buttonBreathe, buttonFade;
+        private int r = 0, g = 0, b = 0, w = 0, whiteContent = 0;
         private float brightness = 1;
         NetworkHandler networkHandler;
 
@@ -217,7 +225,36 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             brightnessBar = view.findViewById(R.id.brightnessBar);
             whiteContentBar = view.findViewById(R.id.whiteContentBar);
             onOffSwitch = view.findViewById(R.id.switchOnOff);
+            buttonBreathe = view.findViewById(R.id.buttonBreathe);
+            buttonFade = view.findViewById(R.id.buttonFade);
             networkHandler = new NetworkHandler();
+
+        }
+
+        private void sendMessage(String url){
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!");
+                    Log.e("Volly Error", error.toString());
+                    NetworkResponse networkResponse = error.networkResponse;
+                    if (networkResponse != null) {
+                        Log.e("Status code", String.valueOf(networkResponse.statusCode));
+                    }
+                }
+            });
+            RequestQueue queue = Volley.newRequestQueue(mView.getContext());
+            queue.add(stringRequest);
+        }
+
+        private void updateDials(){
+            onOffSwitch.setChecked(true);
+            buttonFade.setTextColor(Color.WHITE);
+            buttonBreathe.setTextColor(Color.WHITE);
         }
 
         @Override
@@ -225,4 +262,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
+
+
+
+
 }

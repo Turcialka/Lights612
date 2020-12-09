@@ -16,4 +16,6 @@
     <string name="menu_groups">Grupy</string>
     <string name="menu_schedule">Harmonogramy</string>
     <string name="placeholderText">Brak urządzeń</string>
+    <string name="buttonBreatheText">Oddychanie</string>
+    <string name="buttonFadeText">Płynnie</string>
 </resources>
