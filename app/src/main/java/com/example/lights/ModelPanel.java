@@ -145,7 +145,7 @@ public class ModelPanel extends AppCompatActivity {
 
         }
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.closeDrawer(Gravity.LEFT, true);
+        mDrawerLayout.closeDrawer(Gravity.LEFT, false);
 
         return super.onOptionsItemSelected(item);
     }
