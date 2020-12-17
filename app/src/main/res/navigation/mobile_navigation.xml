@@ -17,21 +17,16 @@
 
     <fragment
         android:id="@+id/nav_light"
-        android:name="com.example.lights.ItemFragment"
+        android:name="com.example.lights.Devices"
         android:label="@string/menu_lights"
-        tools:layout="@layout/fragment_item_list" />
+        tools:layout="@layout/fragment_devices" />
 
     <fragment
         android:id="@+id/nav_groups"
-        android:name="com.example.lights.ui.groups.GroupsFragment"
+        android:name="com.example.lights.ItemFragment"
         android:label="@string/menu_groups"
-        tools:layout="@layout/fragment_groups" />
+        tools:layout="@layout/fragment_item_list" />
 
-    <fragment
-        android:id="@+id/nav_schedule"
-        android:name="com.example.lights.ui.schedule.ScheduleFragment"
-        android:label="@string/menu_schedule"
-        tools:layout="@layout/fragment_schedule" />
     <fragment
         android:id="@+id/addLight"
         android:name="com.example.lights.AddLight"
@@ -46,8 +41,9 @@
     <fragment
         android:id="@+id/add_light_to_group"
         android:name="com.example.lights.AddLightToGroup"
-        android:label="@string/add_lightToGroup"
+        android:label="@string/manageGroups"
         tools:layout="@layout/fragment_add_light_to_group"/>
+
 
     <action
         android:id="@+id/ac_g_addLight"
@@ -59,6 +55,12 @@
         android:id="@+id/action_global_nav_light"
         app:destination="@id/nav_light"/>
     <action
+        android:id="@+id/action_global_nav_groups"
+        app:destination="@id/nav_groups"/>
+    <action
         android:id="@+id/ac_g_light_to_group"
         app:destination="@id/add_light_to_group"/>
+
+
+
 </navigation>

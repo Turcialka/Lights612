@@ -1,10 +1,19 @@
 package com.example.lights;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -18,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -37,12 +47,14 @@ import java.util.List;
 public class ModelPanel extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    String User, loggedUserId;
+
+    String user, loggedUserId;
     NetworkHandler networkHandler;
     List<Group> groups;
     List<String> lightNames = new ArrayList<>();
     List<String> lightsSerial = new ArrayList<>();
     List<String> groupsName = new ArrayList<>();
+    TextView username;
 
 
     @Override
@@ -59,37 +71,55 @@ public class ModelPanel extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_light, R.id.nav_groups, R.id.nav_schedule)
+                R.id.nav_light, R.id.nav_groups, R.id.logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        User = (String) getIntent().getExtras().getString("UsernameL"); //getting login, ID from activity modelPanel
+       navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
+
+
+
+        user = (String) getIntent().getExtras().getString("UsernameL"); //getting login, ID from activity modelPanel
         loggedUserId = (String) getIntent().getExtras().getString("idUser");
+        System.out.println("username" + user);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(getGroups());
+
+
+
     }
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.model_panel, menu); // Inflate the menu; this adds items to the action bar if it is present.
+
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        username = (TextView) findViewById(R.id.loggedUser);
+        username.setText(user);
+
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
+
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+
         int id = item.getItemId();
 
         switch (id) {
@@ -102,7 +132,21 @@ public class ModelPanel extends AppCompatActivity {
             case R.id.add_light_to_group:
                 NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.ac_g_light_to_group);
                 break;
+            case R.id.nav_light:
+                NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.action_global_nav_light);
+                break;
+            case R.id.nav_groups:
+                NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.action_global_nav_groups);
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(ModelPanel.this, MainActivity.class);
+                startActivity(intent);
+                break;
+
         }
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.closeDrawer(Gravity.LEFT, true);
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -136,6 +180,7 @@ public class ModelPanel extends AppCompatActivity {
                     lightNames.add(light.getName());
                     lightsSerial.add(light.getSerial());
                 }
+
                 NavHostFragment.findNavController(getVisibleFragment()).navigate(R.id.action_placeholderFragment_to_nav_light);
             }
         }, new Response.ErrorListener() {
@@ -149,6 +194,7 @@ public class ModelPanel extends AppCompatActivity {
                 }
             }
         });
+
         return stringRequest;
     }
 }

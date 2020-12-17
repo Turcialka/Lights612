@@ -12,9 +12,11 @@
             android:id="@+id/nav_groups"
             android:icon="@drawable/ic_baseline_group_work_24"
             android:title="@string/menu_groups" />
+
         <item
-            android:id="@+id/nav_schedule"
-            android:icon="@drawable/ic_schedule"
-            android:title="@string/menu_schedule" />
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_back"
+            android:title="@string/menu_logout" />
+
     </group>
 </menu>

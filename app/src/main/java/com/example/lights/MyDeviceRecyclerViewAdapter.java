@@ -1,21 +1,22 @@
 package com.example.lights;
 
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -23,7 +24,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -36,30 +40,49 @@ import com.android.volley.toolbox.Volley;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRecyclerViewAdapter.ViewHolder> {
+
+
+    private final List<Light> mValues;
+    private final List<Group> mGroups;
+    public int user_id;
+
 
     Context ctx;
 
-    private final List<Group> mValues;
 
-    public MyItemRecyclerViewAdapter(List<Group> items) {
 
+    public MyDeviceRecyclerViewAdapter(List<Light> items, List<Group> groupp, Context context) {
         mValues = items;
+        mGroups = groupp;
+        this.ctx = context;
+        user_id = mGroups.get(0).getUserId();
+
+
+
     }
+
+
+
 
     @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyDeviceRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item_devices, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.fragment_item, parent, false);
+        return new MyDeviceRecyclerViewAdapter.ViewHolder(view);
     }
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final MyDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+
+
 
         holder.colorPicker.setDrawingCacheEnabled(true);
         holder.colorPicker.buildDrawingCache(true);
@@ -98,8 +121,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                             System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g + " " + holder.b + " " + holder.w + " " + holder.brightness);
 
                             String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
-                            if(!holder.mItem.getLights().isEmpty()) {
-                                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                            if(!holder.mItem.getSerial().isEmpty()) {
+                                String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=" + color, "serial=" + holder.mItem.getSerial());
                                 holder.sendMessage(url);
                             }
                         }
@@ -134,8 +157,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
-                if(!holder.mItem.getLights().isEmpty()) {
-                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                if(!holder.mItem.getSerial().isEmpty()) {
+                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=" + color, "serial=" + holder.mItem.getSerial());
                     holder.sendMessage(url);
                 }
                 holder.updateDials();
@@ -156,8 +179,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
-                if(!holder.mItem.getLights().isEmpty()) {
-                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                if(!holder.mItem.getSerial().isEmpty()) {
+                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=" + color, "serial=" + holder.mItem.getSerial());
                     holder.sendMessage(url);
                 }
                 holder.updateDials();
@@ -169,7 +192,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 holder.buttonFade.setTextColor(Color.WHITE);
                 holder.buttonBreathe.setTextColor(Color.WHITE);
-                if(!holder.mItem.getLights().isEmpty()) {
+                if(!holder.mItem.getSerial().isEmpty()) {
                     String switchState = "";
 
                     if(isChecked){
@@ -178,7 +201,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                         switchState = "OFF";
                     }
 
-                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + switchState, "groupId=" + holder.mItem.getId());
+                    String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=" + switchState, "serial=" + holder.mItem.getSerial());
                     holder.sendMessage(url);
                 }
             }
@@ -188,7 +211,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View view) {
                 holder.updateDials();
-                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=BREATHE", "groupId=" + holder.mItem.getId());
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=BREATHE", "serial=" + holder.mItem.getSerial());
                 holder.sendMessage(url);
                 holder.buttonBreathe.setTextColor(Color.GREEN);
             }
@@ -198,7 +221,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View view) {
                 holder.updateDials();
-                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=FADE", "groupId=" + holder.mItem.getId());
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=FADE", "groupId=" + holder.mItem.getSerial());
                 holder.sendMessage(url);
                 holder.buttonFade.setTextColor(Color.GREEN);
             }
@@ -208,32 +231,80 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
 
-                int whichGroup = holder.mItem.getId();
 
-                if(whichGroup == 0){
-               //     Toast.makeText("To jest grupa wszystkich urządzen, nie możesz jej usunąć").setText().;
+                final Dialog dialog = new Dialog(ctx);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_layout);
 
-            }
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setTitle("usuwanko");
-                    builder.setCancelable(true);
 
-                    builder.setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //   String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=FADE", "groupId=" + holder.mItem.getId());
-                            //   holder.sendMessage(url);
-                        }
-                    });
+                Button buttonDeleteDialog = (Button) dialog.findViewById(R.id.buttonDeleteAlert);
+                Button buttonBackDialog = (Button) dialog.findViewById(R.id.buttonBackAlert);
 
-                    builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                }
+                buttonDeleteDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        System.out.println("Usuwanie");
+                        String url = holder.networkHandler.makeUrl("/lights/removeLight", "serial=" + holder.mItem.getSerial(), "user_id=" + user_id);
+                        holder.sendDeleteMessage(url);
+                        Intent intent = new Intent(ctx, ModelPanel.class);
+                        intent.putExtra("idUser", Integer.toString(user_id));
+                        ctx.startActivity(intent);
+                    }
+                });
+                buttonBackDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        System.out.println("Anulowanie");
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+             //   System.out.println("Button delete");
+/*
+                AlertDialog alertDialog = new AlertDialog.Builder(ctx)
+                        .setTitle("Usuwanie")
+                        .setView(View.inflate(ctx, R.layout.dialog_layout, null))
+                        .setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.out.println("Usuwanie");
+                                String url = holder.networkHandler.makeUrl("/lights/removeLight", "serial" + holder.mItem.getSerial(), "user_id="  );
+                                holder.sendMessage(url);
+                            }
+                        })
+                        .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.out.println("Anulowanie");
+                                dialog.cancel();
+                            }
+                        }).create();
+
+                alertDialog.show();
+*/
+              //  AlertDialog.Builder builder = new AlertDialog.Builder(ctx, R.layout.dialog_layout);
+
+
+              //  builder.setTitle("usuwanko");
+              //  builder.setCancelable(true);
+
+               // builder.setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+              //      @Override
+               //     public void onClick(DialogInterface dialog, int which) {
+               //         String url = holder.networkHandler.makeUrl("/lights/removeLight", "serial" + holder.mItem.getSerial(), "user_id="  );
+               //         holder.sendMessage(url);
+                //    }
+              //  });
+
+              //  builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+              //      @Override
+              //      public void onClick(DialogInterface dialog, int which) {
+             //           dialog.cancel();
+            //        }
+            //    });
+
             }
         });
 
@@ -248,14 +319,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-        public Group mItem;
+        public Light mItem;
+        public int mGroupp;
+
+       // public int user_id;
 
 
         private final ImageView colorPicker;
         private final SeekBar brightnessBar, whiteContentBar;
         private final Switch onOffSwitch;
         private final Button buttonBreathe, buttonFade;
-        private final ImageButton buttonDelete;
+        private final Button buttonDelete;
         static final private int alertDialog = 1;
         private int r = 0, g = 0, b = 0, w = 0, whiteContent = 0;
         private float brightness = 1;
@@ -299,6 +373,26 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             queue.add(stringRequest);
         }
 
+        private void sendDeleteMessage(String url){
+            StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!");
+                    Log.e("Volly Error", error.toString());
+                    NetworkResponse networkResponse = error.networkResponse;
+                    if (networkResponse != null) {
+                        Log.e("Status code", String.valueOf(networkResponse.statusCode));
+                    }
+                }
+            });
+            RequestQueue queue = Volley.newRequestQueue(mView.getContext());
+            queue.add(stringRequest);
+        }
+
         private void updateDials() {
             onOffSwitch.setChecked(true);
             buttonFade.setTextColor(Color.WHITE);
@@ -310,8 +404,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
-
-
 
 
 

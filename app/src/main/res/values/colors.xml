@@ -9,6 +9,7 @@
 
     <color name="error">#FF0000</color>
     <color name="hint">#00CDFF</color>
+    <color name="delete">#8A1212</color>
     //Night
     <color name="basicNight">#003861</color>
 </resources>

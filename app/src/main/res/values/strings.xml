@@ -10,12 +10,17 @@
     <string name="add_light">Dodaj urządzenie</string>
     <string name="add_group">Utwórz grupę</string>
     <string name="add_schedule">Utwórz harmonogram</string>
-    <string name="add_lightToGroup">Dodaj żarówkę do grupy</string>
+    <string name="manageGroups">Zarządzaj grupami</string>
 
     <string name="menu_lights">Urządzenia</string>
     <string name="menu_groups">Grupy</string>
     <string name="menu_schedule">Harmonogramy</string>
+    <string name="menu_logout">Wyloguj</string>
     <string name="placeholderText">Brak urządzeń</string>
     <string name="buttonBreatheText">Oddychanie</string>
     <string name="buttonFadeText">Płynnie</string>
+    <string name="buttonDelete">Usuń</string>
+    <string name="buttonBack">Anuluj</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
