@@ -1,7 +1,11 @@
 package com.example.lights;
 
+
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -25,7 +27,8 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnItemSelectedListener{
+
+public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItemSelectedListener{
 
     Button deleteLightFromGroup;
     String userIdLTG;
@@ -50,6 +53,13 @@ public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnIte
 
 
 
+    public static RemoveLightFromGroup newInstance(String param1, String param2) {
+        RemoveLightFromGroup fragment = new RemoveLightFromGroup();
+
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +69,14 @@ public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnIte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.remove_light_from_group, container, false);
+        View v = inflater.inflate(R.layout.fragment_remove_light_from_group, container, false);
         ModelPanel activity = (ModelPanel) getActivity();
 
         lightNamesLightRemove = ((ModelPanel) getActivity()).lightNames;
         lightSerialLightRemove = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightRemove = ((ModelPanel) getActivity()).groupsName;
+
+        System.out.println("name" + lightNamesLightRemove+"serial"+ lightSerialLightRemove +"gr" +groupNameLightRemove);
 
         deleteLightFromGroup = v.findViewById(R.id.button_removeLightsFromGroup);
 
@@ -87,8 +99,6 @@ public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnIte
         spinnerGroupDelete.setOnItemSelectedListener(this);
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
-
-
 
         deleteLightFromGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,10 +141,8 @@ public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnIte
         return v;
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
 
         int LD = spinnerLightDelete.getSelectedItemPosition();
         nameSelectedLightToDelete = lightNamesLightRemove.get(LD);
@@ -143,7 +151,7 @@ public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnIte
         int GD = spinnerGroupDelete.getSelectedItemPosition();
         nameSelectedGroupToDelete = groupNameLightRemove.get(GD);
 
-
+        System.out.println(nameSelectedLightToDelete + serialSelectedLightToDelete + nameSelectedGroupToDelete);
     }
 
     @Override

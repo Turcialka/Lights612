@@ -87,6 +87,7 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
         spinnerLight = (Spinner) v.findViewById(R.id.spinnerLights);
         spinnerGroup = (Spinner) v.findViewById(R.id.spinnerGroups);
 
+
         ArrayAdapter<String> adapterLightName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightToGroup);
         adapterLightName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLight.setAdapter(adapterLightName);
@@ -149,13 +150,12 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int L = spinnerLight.getSelectedItemPosition();
         nameSelectedLight = lightNamesLightToGroup.get(L);
-//        serialSelectedLight = lightSerialLightToGroup.get(L);
+        serialSelectedLight = lightSerialLightToGroup.get(L);
+
 
         int G = spinnerGroup.getSelectedItemPosition();
-   //     nameSelectedGroup = groupNameLightToGroup.get(G);
+        nameSelectedGroup = groupNameLightToGroup.get(G);
 
-
-    //    System.out.println(nameSelectedLight + serialSelectedLight + nameSelectedGroup);
 
     }
 

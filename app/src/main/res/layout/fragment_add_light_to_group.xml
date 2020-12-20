@@ -96,7 +96,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
 
-    <include layout="@layout/remove_light_from_group" />
+    <include layout="@layout/fragment_remove_light_from_group" />
 
 
 
