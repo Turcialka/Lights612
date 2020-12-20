@@ -42,7 +42,14 @@
         android:id="@+id/add_light_to_group"
         android:name="com.example.lights.AddLightToGroup"
         android:label="@string/manageGroups"
-        tools:layout="@layout/fragment_add_light_to_group"/>
+        tools:layout="@layout/fragment_add_light_to_group">
+        <fragment
+            android:id="@+id/removeLightFromGroup"
+            android:name="com.example.lights.RemoveLightFromGroup"
+            android:label="usuwanie"
+            tools:layout="@layout/fragment_remove_light_from_group"/>
+    </fragment>
+
 
 
     <action

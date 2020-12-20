@@ -40,18 +40,14 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
     List<String> lightSerialLightRemove = new ArrayList<>();
     List<String> groupNameLightRemove = new ArrayList<>();
 
-
     Spinner spinnerLightDelete;
     Spinner spinnerGroupDelete;
-
 
     NetworkHandler networkHandler;
 
     public RemoveLightFromGroup() {
         // Required empty public constructor
     }
-
-
 
     public static RemoveLightFromGroup newInstance(String param1, String param2) {
         RemoveLightFromGroup fragment = new RemoveLightFromGroup();
@@ -76,7 +72,7 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
         lightSerialLightRemove = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightRemove = ((ModelPanel) getActivity()).groupsName;
 
-        System.out.println("name" + lightNamesLightRemove+"serial"+ lightSerialLightRemove +"gr" +groupNameLightRemove);
+        System.out.println("name " + lightNamesLightRemove+"serial "+ lightSerialLightRemove +"gr " +groupNameLightRemove);
 
         deleteLightFromGroup = v.findViewById(R.id.button_removeLightsFromGroup);
 
@@ -136,7 +132,6 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
                 queue.add(stringRequest);
             }
         });
-
 
         return v;
     }

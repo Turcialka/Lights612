@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,16 +68,15 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_light_to_group, container, false);
+        Fragment removeFragment = new RemoveLightFromGroup();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.frameDelete, removeFragment).commit();
         ModelPanel activity = (ModelPanel) getActivity();
 
         lightNamesLightToGroup = ((ModelPanel) getActivity()).lightNames;
         lightSerialLightToGroup = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightToGroup = ((ModelPanel) getActivity()).groupsName;
 
-
-
-    //    System.out.println("mValues: "+ );
-      //  System.out.println("mValues: "+ mGroups);
 
 
         saveLightInGroup = v.findViewById(R.id.button_addLightsToGroup);
@@ -155,13 +155,12 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
 
         int G = spinnerGroup.getSelectedItemPosition();
         nameSelectedGroup = groupNameLightToGroup.get(G);
-
-
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 
 }
