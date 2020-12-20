@@ -115,11 +115,11 @@ public class Register extends AppCompatActivity {
 
         if (!isEmailValid(getEmail)) {
             Toast.makeText(view.getContext(), "Email jest niepoprawny!", Toast.LENGTH_LONG).show();
-            System.out.println("Email zle podany");
+
             return false;
         } else if (getEmail.equals("")) {
             Toast.makeText(view.getContext(), "Pole email nie może być puste!", Toast.LENGTH_LONG).show();
-            System.out.println("Email pusty");
+
             return false;
         } else {
             System.out.println("Email dobrze");
@@ -132,7 +132,6 @@ public class Register extends AppCompatActivity {
 
         if (getUsername.equals("")) {
             Toast.makeText( view.getContext(),"Pole login nie może być puste!", Toast.LENGTH_LONG).show();
-            System.out.println("username zle podany");
             return false;
         } else {
             System.out.println("username dobrze podany");
@@ -146,7 +145,6 @@ public class Register extends AppCompatActivity {
 
         if (getPasswd.equals("")) {
             Toast.makeText(view.getContext(), "Pole hasło nie może być puste!", Toast.LENGTH_LONG).show();
-            System.out.println("haslo zle podany");
             return false;
         } else {
             System.out.println("haslo dobrze podany");

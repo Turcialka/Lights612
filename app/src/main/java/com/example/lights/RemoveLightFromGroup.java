@@ -2,9 +2,6 @@ package com.example.lights;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -26,36 +25,30 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.List;
 
+public class RemoveLightFromGroup  extends Fragment implements AdapterView.OnItemSelectedListener{
 
-public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener{
-
-    Button saveLightInGroup;
+    Button deleteLightFromGroup;
     String userIdLTG;
-    String nameSelectedLight;
-    String serialSelectedLight;
-    String nameSelectedGroup;
+    String nameSelectedLightToDelete;
+    String serialSelectedLightToDelete;
+    String nameSelectedGroupToDelete;
+
+    List<String> lightNamesLightRemove = new ArrayList<>();
+    List<String> lightSerialLightRemove = new ArrayList<>();
+    List<String> groupNameLightRemove = new ArrayList<>();
 
 
-    List<String> lightNamesLightToGroup= new ArrayList<>();
-    List<String> lightSerialLightToGroup = new ArrayList<>();
-    List<String> groupNameLightToGroup = new ArrayList<>();
+    Spinner spinnerLightDelete;
+    Spinner spinnerGroupDelete;
 
-    Spinner spinnerLight;
-    Spinner spinnerGroup;
 
     NetworkHandler networkHandler;
 
-
-    public AddLightToGroup(){
-
+    public RemoveLightFromGroup() {
+        // Required empty public constructor
     }
 
-    public static AddLightToGroup newInstance(String param1, String param2) {
-        AddLightToGroup fragment = new AddLightToGroup();
-        Bundle args = new Bundle();
 
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,51 +59,45 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_add_light_to_group, container, false);
+        View v = inflater.inflate(R.layout.remove_light_from_group, container, false);
         ModelPanel activity = (ModelPanel) getActivity();
 
-        lightNamesLightToGroup = ((ModelPanel) getActivity()).lightNames;
-        lightSerialLightToGroup = ((ModelPanel) getActivity()).lightsSerial;
-        groupNameLightToGroup = ((ModelPanel) getActivity()).groupsName;
+        lightNamesLightRemove = ((ModelPanel) getActivity()).lightNames;
+        lightSerialLightRemove = ((ModelPanel) getActivity()).lightsSerial;
+        groupNameLightRemove = ((ModelPanel) getActivity()).groupsName;
 
-
-
-    //    System.out.println("mValues: "+ );
-      //  System.out.println("mValues: "+ mGroups);
-
-
-        saveLightInGroup = v.findViewById(R.id.button_addLightsToGroup);
+        deleteLightFromGroup = v.findViewById(R.id.button_removeLightsFromGroup);
 
         networkHandler = new NetworkHandler();
         userIdLTG = activity.loggedUserId;
 
-        spinnerLight = (Spinner) v.findViewById(R.id.spinnerLights);
-        spinnerGroup = (Spinner) v.findViewById(R.id.spinnerGroups);
-
-        ArrayAdapter<String> adapterLightName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightToGroup);
-        adapterLightName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLight.setAdapter(adapterLightName);
-
-        ArrayAdapter<String> adapterGroupName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupNameLightToGroup);
-        adapterGroupName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGroup.setAdapter(adapterGroupName);
+        spinnerLightDelete = (Spinner) v.findViewById(R.id.spinnerLightsDelete);
+        spinnerGroupDelete = (Spinner) v.findViewById(R.id.spinnerGroupsDelete);
 
 
-        spinnerLight.setOnItemSelectedListener(this);
-        spinnerGroup.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adapterLightNameDelete = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightRemove);
+        adapterLightNameDelete.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLightDelete.setAdapter(adapterLightNameDelete);
 
+        ArrayAdapter<String> adapterGroupNameDelete = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupNameLightRemove);
+        adapterGroupNameDelete.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGroupDelete.setAdapter(adapterGroupNameDelete);
+
+        spinnerLightDelete.setOnItemSelectedListener(this);
+        spinnerGroupDelete.setOnItemSelectedListener(this);
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
-        saveLightInGroup.setOnClickListener(new View.OnClickListener() {
+
+
+        deleteLightFromGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println(nameSelectedLightToDelete);
+                System.out.println(serialSelectedLightToDelete);
+                System.out.println(nameSelectedGroupToDelete);
 
-                System.out.println(nameSelectedLight);
-                System.out.println(serialSelectedLight);
-                System.out.println(nameSelectedGroup);
-
-                String url = networkHandler.makeUrl("/lights/addLightToGroup", "serial="+serialSelectedLight,"name="+nameSelectedGroup ,"user_id="+userIdLTG);
+                String url = networkHandler.makeUrl("/lights/removeLightToGroup", "serial="+serialSelectedLightToDelete,"name="+nameSelectedGroupToDelete ,"user_id="+userIdLTG);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
@@ -147,15 +134,15 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        int L = spinnerLight.getSelectedItemPosition();
-        nameSelectedLight = lightNamesLightToGroup.get(L);
-//        serialSelectedLight = lightSerialLightToGroup.get(L);
-
-        int G = spinnerGroup.getSelectedItemPosition();
-   //     nameSelectedGroup = groupNameLightToGroup.get(G);
 
 
-    //    System.out.println(nameSelectedLight + serialSelectedLight + nameSelectedGroup);
+        int LD = spinnerLightDelete.getSelectedItemPosition();
+        nameSelectedLightToDelete = lightNamesLightRemove.get(LD);
+        serialSelectedLightToDelete = lightSerialLightRemove.get(LD);
+
+        int GD = spinnerGroupDelete.getSelectedItemPosition();
+        nameSelectedGroupToDelete = groupNameLightRemove.get(GD);
+
 
     }
 
@@ -163,5 +150,4 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
 }

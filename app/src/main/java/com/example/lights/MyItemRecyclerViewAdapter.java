@@ -255,7 +255,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         private final SeekBar brightnessBar, whiteContentBar;
         private final Switch onOffSwitch;
         private final Button buttonBreathe, buttonFade;
-        private final ImageButton buttonDelete;
+        private final Button buttonDelete;
         static final private int alertDialog = 1;
         private int r = 0, g = 0, b = 0, w = 0, whiteContent = 0;
         private float brightness = 1;

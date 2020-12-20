@@ -7,10 +7,30 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/button_item">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DODAJ URZĄDZENIE DO GRUPY"
+                android:textStyle="bold"
+                android:textColor="@color/basicNight"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:textSize="15dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/button_item">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,8 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textStyle="bold"
-
-                android:fontFamily="monospace"
                 android:text="Wybierz urządzenie"
                 />
             <TextView
@@ -32,7 +50,7 @@
                 android:layout_marginTop="75dp"
                 android:text="Wybierz grupę"
                 android:textStyle="bold"
-                android:fontFamily="monospace"/>
+                />
 
 
 
@@ -72,6 +90,13 @@
         android:layout_marginTop="50dp"
         android:text="Dodaj"/>
 
+
+</LinearLayout>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
+    <include layout="@layout/remove_light_from_group" />
 
 
 

@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("Response is: " + response);
+                       System.out.println("Response is: " + response);
                         if(response.startsWith("true")){
                             loginUser = etUsername.getText().toString(); //getting login from sign in panel
                             loggedUserId = response.substring(5); //gettind ID user from response string true+id
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("idUser", loggedUserId);
                             startActivity(intent);
                         }else{
-                            Toast.makeText(v.getContext(),"Niepoprawny login lub hasło! Spróbuj ponownie!", Toast.LENGTH_SHORT);
+                            Toast.makeText(v.getContext(),"Niepoprawny login lub hasło! Spróbuj ponownie!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {

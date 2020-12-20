@@ -136,20 +136,14 @@
         android:layout_gravity="left"
         android:layout_marginLeft="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Usuń"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/error"
-            android:gravity="center"/>
-
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonDelete"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@drawable/ic_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/buttonDelete"
+            android:background="@drawable/button_dialog_delete"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
             />
     </LinearLayout>
 
