@@ -82,7 +82,8 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/button_dialog_delete"
             android:textColor="@color/white"
-            android:text="Usuń"/>
+            android:text="Usuń"
+            android:layout_marginBottom="8dp"/>
 
 
     </LinearLayout>
