@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener{
+public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener {
 
     Button saveLightInGroup;
     String userIdLTG;
@@ -37,9 +38,11 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     String nameSelectedGroup;
 
 
-    List<String> lightNamesLightToGroup= new ArrayList<>();
+    List<String> lightNamesLightToGroup = new ArrayList<>();
     List<String> lightSerialLightToGroup = new ArrayList<>();
     List<String> groupNameLightToGroup = new ArrayList<>();
+    List<Group> allGroups = new ArrayList<>();
+    List<String> groupsNamesWithoutBulb = new ArrayList<>();
 
     Spinner spinnerLight;
     Spinner spinnerGroup;
@@ -47,7 +50,7 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
     NetworkHandler networkHandler;
 
 
-    public AddLightToGroup(){
+    public AddLightToGroup() {
 
     }
 
@@ -76,8 +79,7 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
         lightNamesLightToGroup = ((ModelPanel) getActivity()).lightNames;
         lightSerialLightToGroup = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightToGroup = ((ModelPanel) getActivity()).groupsName;
-
-
+        allGroups = ((ModelPanel) getActivity()).groups;
 
         saveLightInGroup = v.findViewById(R.id.button_addLightsToGroup);
 
@@ -87,19 +89,12 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
         spinnerLight = (Spinner) v.findViewById(R.id.spinnerLights);
         spinnerGroup = (Spinner) v.findViewById(R.id.spinnerGroups);
 
-
         ArrayAdapter<String> adapterLightName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightToGroup);
         adapterLightName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLight.setAdapter(adapterLightName);
 
-        ArrayAdapter<String> adapterGroupName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupNameLightToGroup);
-        adapterGroupName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGroup.setAdapter(adapterGroupName);
-
-
         spinnerLight.setOnItemSelectedListener(this);
         spinnerGroup.setOnItemSelectedListener(this);
-
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
@@ -111,19 +106,19 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
                 System.out.println(serialSelectedLight);
                 System.out.println(nameSelectedGroup);
 
-                String url = networkHandler.makeUrl("/lights/addLightToGroup", "serial="+serialSelectedLight,"name="+nameSelectedGroup ,"user_id="+userIdLTG);
+                String url = networkHandler.makeUrl("/lights/addLightToGroup", "serial=" + serialSelectedLight, "name=" + nameSelectedGroup, "user_id=" + userIdLTG);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         System.out.println("Response is: " + response);
-                        if(response.equals("saved")){
-                            Toast.makeText(v.getContext(),"Dodano pomyślnie!", Toast.LENGTH_LONG).show();
+                        if (response.equals("Saved")) {
+                            Toast.makeText(v.getContext(), "Dodano pomyślnie!", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), ModelPanel.class);
                             intent.putExtra("idUser", userIdLTG);
                             startActivity(intent);
-                        }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(v.getContext(), "Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -148,19 +143,41 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        int L = spinnerLight.getSelectedItemPosition();
-        nameSelectedLight = lightNamesLightToGroup.get(L);
-        serialSelectedLight = lightSerialLightToGroup.get(L);
+        if (parent == spinnerLight) {
+            nameSelectedLight = parent.getSelectedItem().toString();
+            serialSelectedLight = lightSerialLightToGroup.get(parent.getSelectedItemPosition());
 
+            Light selectedLight = null;
+            for (Light light : allGroups.get(0).getLights()) {
+                if (light.getName().equals(nameSelectedLight))
+                    selectedLight = light;
+            }
+            groupsNamesWithoutBulb.clear();
+            for (Group group : allGroups) {
+                boolean isLightInGroup = false;
+                for (Light light : group.getLights()) {
+                    if (light.getName().equals(selectedLight.getName()))
+                        isLightInGroup = true;
+                }
+                if (!isLightInGroup)
+                    groupsNamesWithoutBulb.add(group.getName());
+            }
 
-        int G = spinnerGroup.getSelectedItemPosition();
-        nameSelectedGroup = groupNameLightToGroup.get(G);
+            ArrayAdapter<String> adapterGroupName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupsNamesWithoutBulb);
+            adapterGroupName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerGroup.setEnabled(true);
+            if(groupsNamesWithoutBulb.isEmpty())
+                spinnerGroup.setEnabled(false);
+            spinnerGroup.setAdapter(adapterGroupName);
+
+        } else if (parent == spinnerGroup) {
+            nameSelectedGroup = parent.getSelectedItem().toString();
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
 
 }

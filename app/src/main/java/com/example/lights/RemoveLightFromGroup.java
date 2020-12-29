@@ -39,6 +39,8 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
     List<String> lightNamesLightRemove = new ArrayList<>();
     List<String> lightSerialLightRemove = new ArrayList<>();
     List<String> groupNameLightRemove = new ArrayList<>();
+    List<Group> allGroups = new ArrayList<>();
+    List<String> groupsNamesWithBulb = new ArrayList<>();
 
     Spinner spinnerLightDelete;
     Spinner spinnerGroupDelete;
@@ -71,6 +73,7 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
         lightNamesLightRemove = ((ModelPanel) getActivity()).lightNames;
         lightSerialLightRemove = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightRemove = ((ModelPanel) getActivity()).groupsName;
+        allGroups = ((ModelPanel) getActivity()).groups;
 
         System.out.println("name " + lightNamesLightRemove+"serial "+ lightSerialLightRemove +"gr " +groupNameLightRemove);
 
@@ -86,10 +89,6 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
         ArrayAdapter<String> adapterLightNameDelete = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightRemove);
         adapterLightNameDelete.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLightDelete.setAdapter(adapterLightNameDelete);
-
-        ArrayAdapter<String> adapterGroupNameDelete = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupNameLightRemove);
-        adapterGroupNameDelete.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGroupDelete.setAdapter(adapterGroupNameDelete);
 
         spinnerLightDelete.setOnItemSelectedListener(this);
         spinnerGroupDelete.setOnItemSelectedListener(this);
@@ -109,7 +108,7 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
                     @Override
                     public void onResponse(String response) {
                         System.out.println("Response is: " + response);
-                        if(response.equals("saved")){
+                        if(response.equals("Saved")){
                             Toast.makeText(v.getContext(),"Dodano pomyślnie!", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), ModelPanel.class);
                             intent.putExtra("idUser", userIdLTG);
@@ -138,16 +137,38 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent == spinnerLightDelete){
+            nameSelectedLightToDelete = parent.getSelectedItem().toString();
+            serialSelectedLightToDelete = lightSerialLightRemove.get(parent.getSelectedItemPosition());
 
-        int LD = spinnerLightDelete.getSelectedItemPosition();
-        nameSelectedLightToDelete = lightNamesLightRemove.get(LD);
-        serialSelectedLightToDelete = lightSerialLightRemove.get(LD);
-
-        int GD = spinnerGroupDelete.getSelectedItemPosition();
-        nameSelectedGroupToDelete = groupNameLightRemove.get(GD);
-
-        System.out.println(nameSelectedLightToDelete + serialSelectedLightToDelete + nameSelectedGroupToDelete);
+            Light selectedLight = null;
+            for (Light light: allGroups.get(0).getLights()) {
+                if(light.getName().equals(nameSelectedLightToDelete))
+                    selectedLight = light;
+            }
+            groupsNamesWithBulb.clear();
+            for (Group group: allGroups) {
+                boolean isLightInGroup = false;
+                for (Light light:group.getLights()) {
+                    if(light.getName().equals(selectedLight.getName()))
+                        isLightInGroup = true;
+                }
+                if(isLightInGroup)
+                    groupsNamesWithBulb.add(group.getName());
+            }
+            groupsNamesWithBulb.remove(0);
+            ArrayAdapter<String> adapterGroupNameDelete = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupsNamesWithBulb);
+            adapterGroupNameDelete.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerGroupDelete.setEnabled(true);
+            if(groupsNamesWithBulb.isEmpty())
+                spinnerGroupDelete.setEnabled(false);
+            spinnerGroupDelete.setAdapter(adapterGroupNameDelete);
+        }
+        else if(parent == spinnerGroupDelete){
+            nameSelectedGroupToDelete = parent.getSelectedItem().toString();
+        }
     }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

@@ -94,7 +94,6 @@ public class ModelPanel extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.model_panel, menu); // Inflate the menu; this adds items to the action bar if it is present.
