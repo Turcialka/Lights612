@@ -65,8 +65,6 @@ public class AddLight extends Fragment{
         networkHandler = new NetworkHandler();
         userId = activity.loggedUserId;
 
-        Toast.makeText(activity, userId , Toast.LENGTH_SHORT).show();
-
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
         saveLight.setOnClickListener(new View.OnClickListener() {

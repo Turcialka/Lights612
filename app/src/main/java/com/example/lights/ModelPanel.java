@@ -80,19 +80,13 @@ public class ModelPanel extends AppCompatActivity {
 
        navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
 
-
-
         user = (String) getIntent().getExtras().getString("UsernameL"); //getting login, ID from activity modelPanel
         loggedUserId = (String) getIntent().getExtras().getString("idUser");
         System.out.println("username" + user);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(getGroups());
-
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,8 +104,6 @@ public class ModelPanel extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-
 
     @SuppressLint("NonConstantResourceId")
     @Override

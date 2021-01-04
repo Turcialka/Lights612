@@ -11,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,12 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -44,7 +43,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private final List<Group> mValues;
 
     public MyItemRecyclerViewAdapter(List<Group> items) {
-
         mValues = items;
     }
 
@@ -69,6 +67,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    long timeTouched = SystemClock.elapsedRealtime(); //Pobranie czasu motionEventu
                     Bitmap bitmap = holder.colorPicker.getDrawingCache();
                     int x = (int)motionEvent.getX();
                     if(x < bitmap.getWidth() && x >= 0) {
@@ -95,13 +94,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                             holder.brightnessBar.setThumbTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
                             holder.brightnessBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
 
-                            System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g + " " + holder.b + " " + holder.w + " " + holder.brightness);
+                           if((timeTouched - holder.timeOfLastColorSandedSuccessfully) > holder.timeIntervalToSendMessage) { //Wysyłanie żądań na serwer co conajmniej 250ms (zmienna stała w holderze)
 
-                            String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
-                            if(!holder.mItem.getLights().isEmpty()) {
-                                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
-                                holder.sendMessage(url);
-                            }
+                               System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g + " " + holder.b + " " + holder.w + " " + holder.brightness);
+
+                               String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
+                               if (!holder.mItem.getLights().isEmpty()) {
+                                   String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                                   holder.sendMessage(url);
+                               }
+                               holder.timeOfLastColorSandedSuccessfully = timeTouched; //Zapisanie do zmiennej holdera kiedy ostatnio wysłano kolor na serwer
+                           }
                         }
                     }
                 }
@@ -256,10 +259,13 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         private final Switch onOffSwitch;
         private final Button buttonBreathe, buttonFade;
         private final Button buttonDelete;
-        static final private int alertDialog = 1;
-        private int r = 0, g = 0, b = 0, w = 0, whiteContent = 0;
+        private int r = 0, g = 0, b = 0, w = 0;
         private float brightness = 1;
         NetworkHandler networkHandler;
+        private long timeOfLastColorSandedSuccessfully = 0;
+        private final long timeIntervalToSendMessage = 250;
+
+
 
         public ViewHolder(View view) {
             super(view);
