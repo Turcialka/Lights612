@@ -48,7 +48,6 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
     NetworkHandler networkHandler;
 
     public RemoveLightFromGroup() {
-        // Required empty public constructor
     }
 
     public static RemoveLightFromGroup newInstance(String param1, String param2) {
@@ -104,17 +103,17 @@ public class RemoveLightFromGroup extends Fragment implements AdapterView.OnItem
 
                 String url = networkHandler.makeUrl("/lights/removeLightToGroup", "serial="+serialSelectedLightToDelete,"name="+nameSelectedGroupToDelete ,"user_id="+userIdLTG);
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         System.out.println("Response is: " + response);
-                        if(response.equals("Saved")){
-                            Toast.makeText(v.getContext(),"Dodano pomyślnie!", Toast.LENGTH_LONG).show();
+                        if(response.equals("Removed")){
+                            Toast.makeText(v.getContext(),"Usunięto pomyślnie!", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), ModelPanel.class);
                             intent.putExtra("idUser", userIdLTG);
                             startActivity(intent);
                         }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Błąd usuwania urządzenia.", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {

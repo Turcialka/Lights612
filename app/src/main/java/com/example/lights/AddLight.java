@@ -21,11 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddLight#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddLight extends Fragment{
 
     Button saveLight;
@@ -36,7 +32,7 @@ public class AddLight extends Fragment{
     NetworkHandler networkHandler;
 
     public AddLight() {
-        // Required empty public constructor
+
     }
 
     public static AddLight newInstance(String param1, String param2) {
@@ -48,7 +44,6 @@ public class AddLight extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          //  networkHandler = new NetworkHandler();
         }
 
 

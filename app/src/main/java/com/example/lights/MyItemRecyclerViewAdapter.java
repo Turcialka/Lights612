@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -17,12 +19,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -38,19 +42,23 @@ import java.util.List;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    Context ctx;
-
     private final List<Group> mValues;
 
-    public MyItemRecyclerViewAdapter(List<Group> items) {
+    public MyItemRecyclerViewAdapter(List<Group> items, Context context) {
+
         mValues = items;
+        this.ctx = context;
     }
+
+    Context ctx;
 
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_item_devices, parent, false);
+
+
         return new ViewHolder(view);
     }
 
@@ -59,8 +67,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
+        if(holder.mItem.getName().equals("Wszystkie urzadzenia")){
+            holder.buttonDelete.setVisibility(View.GONE);
+        }
+
         holder.colorPicker.setDrawingCacheEnabled(true);
         holder.colorPicker.buildDrawingCache(true);
+
+
 
         holder.colorPicker.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -211,33 +225,39 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
 
-                int whichGroup = holder.mItem.getId();
 
-                if(whichGroup == 0){
-               //     Toast.makeText("To jest grupa wszystkich urządzen, nie możesz jej usunąć").setText().;
 
-            }
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setTitle("usuwanko");
-                    builder.setCancelable(true);
+                    final Dialog dialog = new Dialog(ctx);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(false);
+                    dialog.setContentView(R.layout.dialog_layout);
 
-                    builder.setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+
+                    Button buttonDeleteDialog = (Button) dialog.findViewById(R.id.buttonDeleteAlert);
+                    Button buttonBackDialog = (Button) dialog.findViewById(R.id.buttonBackAlert);
+
+                    buttonDeleteDialog.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //   String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=FADE", "groupId=" + holder.mItem.getId());
-                            //   holder.sendMessage(url);
+                        public void onClick(View v) {
+                            System.out.println("Usuwanie");
+                            String url = holder.networkHandler.makeUrl("/groups/removeGroup", "name=" + holder.mItem.getName(), "user_id=" + holder.mItem.getUserId());
+                            holder.sendDeleteMessage(url);
+                            Intent intent = new Intent(ctx, ModelPanel.class);
+                            intent.putExtra("idUser", Integer.toString(holder.mItem.getUserId()));
+                            ctx.startActivity(intent);
                         }
                     });
-
-                    builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                    buttonBackDialog.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(View v) {
+                            System.out.println("Anulowanie");
                             dialog.cancel();
                         }
                     });
+
+                    dialog.show();
                 }
-            }
+
         });
 
         holder.mContentView.setText(mValues.get(position).getName());
@@ -267,6 +287,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
 
 
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -278,15 +299,32 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             buttonBreathe = view.findViewById(R.id.buttonBreathe);
             buttonFade = view.findViewById(R.id.buttonFade);
             buttonDelete = view.findViewById(R.id.buttonDelete);
-
-
-
             networkHandler = new NetworkHandler();
 
         }
 
         private void sendMessage(String url){
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!");
+                    Log.e("Volly Error", error.toString());
+                    NetworkResponse networkResponse = error.networkResponse;
+                    if (networkResponse != null) {
+                        Log.e("Status code", String.valueOf(networkResponse.statusCode));
+                    }
+                }
+            });
+            RequestQueue queue = Volley.newRequestQueue(mView.getContext());
+            queue.add(stringRequest);
+        }
+
+        private void sendDeleteMessage(String url){
+            StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                 }
@@ -316,9 +354,5 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
-
-
-
-
 
 }

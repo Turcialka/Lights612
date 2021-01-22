@@ -13,9 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A fragment representing a list of Items.
- */
 public class ItemFragment extends Fragment {
 
     // TODO: Customize parameter argument names
@@ -23,10 +20,7 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public ItemFragment() {
     }
 
@@ -57,7 +51,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(activity.groups));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(activity.groups, context));
         }
         return view;
     }

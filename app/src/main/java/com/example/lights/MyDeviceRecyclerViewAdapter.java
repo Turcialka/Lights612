@@ -50,10 +50,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
     private final List<Group> mGroups;
     public int user_id;
 
-
     Context ctx;
-
-
 
     public MyDeviceRecyclerViewAdapter(List<Light> items, List<Group> groupp, Context context) {
         mValues = items;
@@ -61,12 +58,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
         this.ctx = context;
         user_id = mGroups.get(0).getUserId();
 
-
-
     }
-
-
-
 
     @NotNull
     @Override
@@ -76,15 +68,10 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
         return new MyDeviceRecyclerViewAdapter.ViewHolder(view);
     }
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(final MyDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-
-
-
         holder.colorPicker.setDrawingCacheEnabled(true);
         holder.colorPicker.buildDrawingCache(true);
 
@@ -151,14 +138,10 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
                     holder.whiteContentBar.setProgress(holder.w, true);
                     holder.updateDials();
                 }
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -267,49 +250,6 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
                 });
 
                 dialog.show();
-             //   System.out.println("Button delete");
-/*
-                AlertDialog alertDialog = new AlertDialog.Builder(ctx)
-                        .setTitle("Usuwanie")
-                        .setView(View.inflate(ctx, R.layout.dialog_layout, null))
-                        .setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                System.out.println("Usuwanie");
-                                String url = holder.networkHandler.makeUrl("/lights/removeLight", "serial" + holder.mItem.getSerial(), "user_id="  );
-                                holder.sendMessage(url);
-                            }
-                        })
-                        .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                System.out.println("Anulowanie");
-                                dialog.cancel();
-                            }
-                        }).create();
-
-                alertDialog.show();
-*/
-              //  AlertDialog.Builder builder = new AlertDialog.Builder(ctx, R.layout.dialog_layout);
-
-
-              //  builder.setTitle("usuwanko");
-              //  builder.setCancelable(true);
-
-               // builder.setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
-              //      @Override
-               //     public void onClick(DialogInterface dialog, int which) {
-               //         String url = holder.networkHandler.makeUrl("/lights/removeLight", "serial" + holder.mItem.getSerial(), "user_id="  );
-               //         holder.sendMessage(url);
-                //    }
-              //  });
-
-              //  builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
-              //      @Override
-              //      public void onClick(DialogInterface dialog, int which) {
-             //           dialog.cancel();
-            //        }
-            //    });
 
             }
         });
@@ -326,10 +266,6 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
         public final View mView;
         public final TextView mContentView;
         public Light mItem;
-        public int mGroupp;
-
-       // public int user_id;
-
 
         private final ImageView colorPicker;
         private final SeekBar brightnessBar, whiteContentBar;
@@ -353,9 +289,6 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
             buttonBreathe = view.findViewById(R.id.buttonBreathe);
             buttonFade = view.findViewById(R.id.buttonFade);
             buttonDelete = view.findViewById(R.id.buttonDelete);
-
-
-
             networkHandler = new NetworkHandler();
 
         }
@@ -411,7 +344,4 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
-
-
-
 }

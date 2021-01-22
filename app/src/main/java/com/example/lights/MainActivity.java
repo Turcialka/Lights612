@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     String outputString;
     String AES = "AES";
     String loggedUserId, loginUser;
-    String nameLight, serialNum, nameGroup;
     NetworkHandler networkHandler;
 
 

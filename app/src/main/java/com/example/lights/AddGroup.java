@@ -31,7 +31,6 @@ public class AddGroup extends Fragment {
     NetworkHandler networkHandler;
 
     public AddGroup() {
-        // Required empty public constructor
     }
 
     public static AddGroup newInstance(String param1, String param2) {
