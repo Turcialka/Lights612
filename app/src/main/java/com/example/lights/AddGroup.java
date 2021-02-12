@@ -69,18 +69,22 @@ public class AddGroup extends Fragment {
         saveGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = networkHandler.makeUrl("/groups/add", "name="+nameGroup.getText(), "user_id="+userId_toNewGroup);
+                String url = networkHandler.makeUrl("/groups/add",
+                        "name="+nameGroup.getText(), "user_id="+userId_toNewGroup);
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if(response.equals("Saved")){
-                            Toast.makeText(v.getContext(),"Grupa dodana pomyślnie!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Grupa dodana pomyślnie!",
+                                    Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), ModelPanel.class);
                             intent.putExtra("idUser", userId_toNewGroup);
                             startActivity(intent);
                         }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania nowej grupy.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Błąd dodawania nowej grupy.",
+                                    Toast.LENGTH_LONG).show();
                         }
 
                     }

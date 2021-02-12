@@ -103,21 +103,23 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                                 holder.w = 0;
                                 holder.whiteContentBar.setProgress(holder.w, true);
                             }
-
                             holder.updateDials();
                             holder.brightnessBar.setThumbTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
                             holder.brightnessBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(tempR,tempG,tempB)));
+                            //Wysyłanie żądań na serwer co conajmniej 250ms (zmienna stała w holderze)
+                           if((timeTouched - holder.timeOfLastColorSandedSuccessfully) > holder.timeIntervalToSendMessage) {
 
-                           if((timeTouched - holder.timeOfLastColorSandedSuccessfully) > holder.timeIntervalToSendMessage) { //Wysyłanie żądań na serwer co conajmniej 250ms (zmienna stała w holderze)
-
-                               System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g + " " + holder.b + " " + holder.w + " " + holder.brightness);
-
-                               String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_" + holder.brightness;
+                               System.out.println("Group: " + holder.mItem.getName() + " Color: " + holder.r + " " + holder.g
+                                       + " " + holder.b + " " + holder.w + " " + holder.brightness);
+                               String color = holder.r + "_" + holder.g + "_" + holder.b + "_" + holder.w + "_"
+                                       + holder.brightness;
                                if (!holder.mItem.getLights().isEmpty()) {
-                                   String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=" + color, "groupId=" + holder.mItem.getId());
+                                   String url = holder.networkHandler.makeUrl("/mqtt/sendInfo",
+                                           "message=" + color, "groupId=" + holder.mItem.getId());
                                    holder.sendMessage(url);
                                }
-                               holder.timeOfLastColorSandedSuccessfully = timeTouched; //Zapisanie do zmiennej holdera kiedy ostatnio wysłano kolor na serwer
+                               //Zapisanie do zmiennej holdera kiedy ostatnio wysłano kolor na serwer
+                               holder.timeOfLastColorSandedSuccessfully = timeTouched;
                            }
                         }
                     }
@@ -225,14 +227,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
 
-
-
                     final Dialog dialog = new Dialog(ctx);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(false);
                     dialog.setContentView(R.layout.dialog_layout);
-
-
                     Button buttonDeleteDialog = (Button) dialog.findViewById(R.id.buttonDeleteAlert);
                     Button buttonBackDialog = (Button) dialog.findViewById(R.id.buttonBackAlert);
 
@@ -240,7 +238,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                         @Override
                         public void onClick(View v) {
                             System.out.println("Usuwanie");
-                            String url = holder.networkHandler.makeUrl("/groups/removeGroup", "name=" + holder.mItem.getName(), "user_id=" + holder.mItem.getUserId());
+                            String url = holder.networkHandler.makeUrl("/groups/removeGroup",
+                                    "name=" + holder.mItem.getName(),
+                                    "user_id=" + holder.mItem.getUserId());
                             holder.sendDeleteMessage(url);
                             Intent intent = new Intent(ctx, ModelPanel.class);
                             intent.putExtra("idUser", Integer.toString(holder.mItem.getUserId()));

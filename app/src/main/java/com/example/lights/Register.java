@@ -58,21 +58,22 @@ public class Register extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    String url = networkHandler.makeUrl("/users/add", "login="+reg_username.getText(), "password="+outputString, "email="+reg_mail.getText());
+                    String url = networkHandler.makeUrl("/users/add", "login="+reg_username.getText(),
+                            "password="+outputString, "email="+reg_mail.getText());
                     System.out.println(url);
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             System.out.println("Response is: " + response);
                             if(response.equals("Username_exist") || response.equals("Email_exist")){
-                                Toast.makeText(v.getContext(), "Dane niepoprawne! Proszę sprawdzić wpisane dane.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(v.getContext(), "Dane niepoprawne! Proszę sprawdzić wpisane dane.",
+                                        Toast.LENGTH_LONG).show();
                                 System.out.println("Dane niepoprawne! Proszę sprawdzić wpisane dane.");
                             }else{
                                 Toast.makeText(v.getContext(), "Zarejestrowano pomyślnie!", Toast.LENGTH_SHORT).show();
                                 Intent mainActivity = new Intent(Register.this, MainActivity.class);
                                 startActivity(mainActivity);
                             }
-
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -81,11 +82,8 @@ public class Register extends AppCompatActivity {
                         }
                     });
                     queue.add(stringRequest);
-
                 }
-
             }
-
         });
     }
 

@@ -66,19 +66,23 @@ public class AddLight extends Fragment{
             @Override
             public void onClick(View v) {
 
-                String url = networkHandler.makeUrl("/lights/add", "serial="+serial.getText(),"name="+name.getText() ,"user_id="+userId);
+                String url = networkHandler.makeUrl("/lights/add",
+                        "serial="+serial.getText(),"name="+name.getText() ,"user_id="+userId);
                // System.out.println(url);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         System.out.println("Response is: " + response);
                         if(response.equals("Saved")){
-                            Toast.makeText(v.getContext(),"Dodano pomyślnie urządzenie!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Dodano pomyślnie urządzenie!",
+                                    Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), ModelPanel.class);
                             intent.putExtra("idUser", userId);
                             startActivity(intent);
                         }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {

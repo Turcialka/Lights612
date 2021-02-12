@@ -80,19 +80,15 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
         lightSerialLightToGroup = ((ModelPanel) getActivity()).lightsSerial;
         groupNameLightToGroup = ((ModelPanel) getActivity()).groupsName;
         allGroups = ((ModelPanel) getActivity()).groups;
-
         saveLightInGroup = v.findViewById(R.id.button_addLightsToGroup);
-
         networkHandler = new NetworkHandler();
         userIdLTG = activity.loggedUserId;
-
         spinnerLight = (Spinner) v.findViewById(R.id.spinnerLights);
         spinnerGroup = (Spinner) v.findViewById(R.id.spinnerGroups);
 
         ArrayAdapter<String> adapterLightName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lightNamesLightToGroup);
         adapterLightName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLight.setAdapter(adapterLightName);
-
         spinnerLight.setOnItemSelectedListener(this);
         spinnerGroup.setOnItemSelectedListener(this);
 
@@ -106,7 +102,8 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
                 System.out.println(serialSelectedLight);
                 System.out.println(nameSelectedGroup);
 
-                String url = networkHandler.makeUrl("/lights/addLightToGroup", "serial=" + serialSelectedLight, "name=" + nameSelectedGroup, "user_id=" + userIdLTG);
+                String url = networkHandler.makeUrl("/lights/addLightToGroup", "serial=" + serialSelectedLight, "name="
+                        + nameSelectedGroup, "user_id=" + userIdLTG);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
@@ -162,7 +159,6 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
                 if (!isLightInGroup)
                     groupsNamesWithoutBulb.add(group.getName());
             }
-
             ArrayAdapter<String> adapterGroupName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupsNamesWithoutBulb);
             adapterGroupName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerGroup.setEnabled(true);
