@@ -8,7 +8,7 @@ public class NetworkHandler{
     public String makeUrl(String header, String... values) {
         String tempUrl = "";
         //kacper ip
-        //String restIp = "http://192.168.0.116:8080";
+        String restIp = "http://192.168.0.116:8080";
         //magda ip
         String restIp = "http://192.168.8.117:8080";
         //michal ip

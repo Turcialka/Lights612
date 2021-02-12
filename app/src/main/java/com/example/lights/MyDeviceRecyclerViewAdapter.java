@@ -200,7 +200,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
             @Override
             public void onClick(View view) {
                 holder.updateDials();
-                String url = holder.networkHandler.makeUrl("/mqtt/sendInfo", "message=BREATHE", "serial=" + holder.mItem.getSerial());
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=BREATHE", "serial=" + holder.mItem.getSerial());
                 holder.sendMessage(url);
                 holder.buttonBreathe.setTextColor(Color.GREEN);
             }
@@ -210,7 +210,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MyDeviceRe
             @Override
             public void onClick(View view) {
                 holder.updateDials();
-                String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=FADE", "groupId=" + holder.mItem.getSerial());
+                String url = holder.networkHandler.makeUrl("/mqtt/sendInfoOne", "message=FADE", "serial=" + holder.mItem.getSerial());
                 holder.sendMessage(url);
                 holder.buttonFade.setTextColor(Color.GREEN);
             }
