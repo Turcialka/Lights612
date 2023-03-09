@@ -30,7 +30,6 @@ public class Devices extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,5 +53,4 @@ public class Devices extends Fragment {
         }
         return view;
     }
-
 }

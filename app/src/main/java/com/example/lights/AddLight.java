@@ -21,39 +21,30 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+public class AddLight extends Fragment {
 
-public class AddLight extends Fragment{
-
-    Button saveLight;
-    EditText name;
-    EditText serial;
-    String userId;
-
-    NetworkHandler networkHandler;
+    private Button saveLight;
+    private EditText nameEditText;
+    private EditText serialEditText;
+    private String userId;
+    private NetworkHandler networkHandler;
 
     public AddLight() {
 
     }
 
-    public static AddLight newInstance(String param1, String param2) {
-        AddLight fragment = new AddLight();
-        Bundle args = new Bundle();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        }
-
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_add_light, container, false);
         saveLight = v.findViewById(R.id.button_addL);
-        name = v.findViewById(R.id.addLightEditTextName);
-        serial = v.findViewById(R.id.addLightEditTextSerialNumber);
+        nameEditText = v.findViewById(R.id.addLightEditTextName);
+        serialEditText = v.findViewById(R.id.addLightEditTextSerialNumber);
 
         ModelPanel activity = (ModelPanel) getActivity();
 
@@ -67,25 +58,24 @@ public class AddLight extends Fragment{
             public void onClick(View v) {
 
                 String url = networkHandler.makeUrl("/lights/add",
-                        "serial="+serial.getText(),"name="+name.getText() ,"user_id="+userId);
-               // System.out.println(url);
+                        "serial=" + serialEditText.getText(), "name=" + nameEditText.getText(), "user_id=" + userId);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("Response is: " + response);
-                        if(response.equals("Saved")){
-                            Toast.makeText(v.getContext(),"Dodano pomyślnie urządzenie!",
-                                    Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getContext(), ModelPanel.class);
-                            intent.putExtra("idUser", userId);
-                            startActivity(intent);
-                        }else{
-                            Toast.makeText(v.getContext(),"Błąd dodawania urządzenia.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+                            @Override
+                            public void onResponse(String response) {
+                                System.out.println("Response is: " + response);
+                                if (response.equals("Saved")) {
+                                    Toast.makeText(v.getContext(), "Dodano pomyślnie urządzenie!",
+                                            Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(getContext(), ModelPanel.class);
+                                    intent.putExtra("idUser", userId);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(v.getContext(), "Błąd dodawania urządzenia.",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println("That didn't work!");

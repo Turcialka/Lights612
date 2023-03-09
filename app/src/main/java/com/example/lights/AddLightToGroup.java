@@ -31,34 +31,26 @@ import java.util.List;
 
 public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    Button saveLightInGroup;
-    String userIdLTG;
-    String nameSelectedLight;
-    String serialSelectedLight;
-    String nameSelectedGroup;
+    private Button saveLightInGroup;
+    private String userIdLTG;
+    private String nameSelectedLight;
+    private String serialSelectedLight;
+    private String nameSelectedGroup;
 
 
-    List<String> lightNamesLightToGroup = new ArrayList<>();
-    List<String> lightSerialLightToGroup = new ArrayList<>();
-    List<String> groupNameLightToGroup = new ArrayList<>();
-    List<Group> allGroups = new ArrayList<>();
-    List<String> groupsNamesWithoutBulb = new ArrayList<>();
+    private List<String> lightNamesLightToGroup;
+    private List<String> lightSerialLightToGroup;
+    private List<String> groupNameLightToGroup;
+    private List<Group> allGroups;
+    private List<String> groupsNamesWithoutBulb;
 
-    Spinner spinnerLight;
-    Spinner spinnerGroup;
+    private Spinner spinnerLight;
+    private Spinner spinnerGroup;
 
-    NetworkHandler networkHandler;
+    private NetworkHandler networkHandler;
 
 
     public AddLightToGroup() {
-
-    }
-
-    public static AddLightToGroup newInstance(String param1, String param2) {
-        AddLightToGroup fragment = new AddLightToGroup();
-        Bundle args = new Bundle();
-
-        return fragment;
     }
 
     @Override
@@ -132,8 +124,6 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
                 queue.add(stringRequest);
             }
         });
-
-
         return v;
     }
 
@@ -162,7 +152,7 @@ public class AddLightToGroup extends Fragment implements AdapterView.OnItemSelec
             ArrayAdapter<String> adapterGroupName = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, groupsNamesWithoutBulb);
             adapterGroupName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerGroup.setEnabled(true);
-            if(groupsNamesWithoutBulb.isEmpty())
+            if (groupsNamesWithoutBulb.isEmpty())
                 spinnerGroup.setEnabled(false);
             spinnerGroup.setAdapter(adapterGroupName);
 

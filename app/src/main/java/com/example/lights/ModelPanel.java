@@ -36,18 +36,22 @@ import androidx.appcompat.widget.Toolbar;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-//
+
+@Getter
+@Setter
 public class ModelPanel extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    String user, loggedUserId;
-    NetworkHandler networkHandler;
-    List<Group> groups;
-    List<String> lightNames = new ArrayList<>();
-    List<String> lightsSerial = new ArrayList<>();
-    List<String> groupsName = new ArrayList<>();
-    TextView username;
+    private String user, loggedUserId;
+    private NetworkHandler networkHandler;
+
+
+    private List<Group> groups;
+    private List<String> lightNames = new ArrayList<>();
+    private List<String> lightsSerial = new ArrayList<>();
+    private List<String> groupsName = new ArrayList<>();
+    private TextView username;
 
 
     @Override

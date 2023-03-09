@@ -25,16 +25,15 @@ import java.security.MessageDigest;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-//OD MICHALA
 
 public class MainActivity extends AppCompatActivity {
-    EditText etUsername, etPasswd;
-    Button btLogin, btRegister;
+    private EditText etUsername, etPasswd;
+    private Button btLogin, btRegister;
 
-    String outputString;
-    String AES = "AES";
-    String loggedUserId, loginUser;
-    NetworkHandler networkHandler;
+    private String outputString;
+    private String AES = "AES";
+    private String loggedUserId, loginUser;
+    private NetworkHandler networkHandler;
 
 
     @Override
@@ -53,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
         etUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                username_focus_change(view, hasFocus);
+                usernameFocusChange(view, hasFocus);
             }
         });
 
         etPasswd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                password_focus_change(view, hasFocus);
+                passwordFocusChange(view, hasFocus);
             }
         });
 
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return  secretKeySpec;
     }
 
-    private void password_focus_change(View view, boolean hasFocus) {
+    private void passwordFocusChange(View view, boolean hasFocus) {
         if(hasFocus){
             return;
         }
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void username_focus_change(View view, boolean hasFocus) {
+    private void usernameFocusChange(View view, boolean hasFocus) {
         if(hasFocus){
             return;
         }
